@@ -28,11 +28,19 @@ class Database {
         }
       );
     }
-
     return this._instance;
   }
   static getInstance(): Sequelize {
+    if (!this._instance) this.intialize();
     return this._instance;
+  }
+  static async sync() {
+    const instance = this._instance;
+    try {
+      await instance.sync();
+    } catch (error) {
+      console.error(error, ' eeororisf');
+    }
   }
 }
 

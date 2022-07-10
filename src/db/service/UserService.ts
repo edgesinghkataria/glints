@@ -1,16 +1,13 @@
 import UserModel from '../model/UserModel';
-
-type createUserInput = {
-  name: string;
-  mobileNumber: string;
-};
+import OrderHistoryModel from '../model/OrderHistoryModel';
+import RestaurantModel from '../model/RestaurantModel';
 
 export default class UserService {
-  create(payload: UserModel) {
-    return UserModel.create(payload);
-  }
+  restaurantModel: RestaurantModel = new RestaurantModel();
+  orderHistoryModel: OrderHistoryModel = new OrderHistoryModel();
+  userModel: UserModel = new UserModel();
 
-  findOneByMobile(mobileNumber: string) {
+  placeOrder(mobileNumber: string) {
     return UserModel.findOne({
       where: {
         name: mobileNumber,
