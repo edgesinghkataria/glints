@@ -6,22 +6,21 @@ import {
   DataTypes,
 } from 'sequelize';
 
-export default class MenuModel extends Model<
-  InferAttributes<MenuModel>,
-  InferCreationAttributes<MenuModel>
+export default class OrderHistoryModel extends Model<
+  InferAttributes<OrderHistoryModel>,
+  InferCreationAttributes<OrderHistoryModel>
 > {
   declare id: number;
   declare userId: number;
   declare restaurantId: number;
   declare amount: number;
   declare dishId: number;
-  declare price: number;
   declare status: string;
   declare updatedAt: Date;
   declare createdAt: Date;
 }
 
-MenuModel.init(
+OrderHistoryModel.init(
   {
     id: {
       type: DataTypes.INTEGER.UNSIGNED,
@@ -29,29 +28,28 @@ MenuModel.init(
       primaryKey: true,
     },
     userId: {
-      type: new DataTypes.NUMBER(),
+      type: new DataTypes.INTEGER(),
     },
     restaurantId: {
-      type: new DataTypes.NUMBER(),
+      type: new DataTypes.INTEGER(),
     },
     dishId: {
-      type: new DataTypes.NUMBER(),
+      type: new DataTypes.INTEGER(),
     },
     amount: {
-      type: new DataTypes.NUMBER(),
-    },
-    price: {
-      type: new DataTypes.NUMBER(),
+      type: new DataTypes.INTEGER(),
     },
     status: {
       type: new DataTypes.ENUM('success', 'pending', 'failed'),
     },
-    createdAt: DataTypes.DATE,
-    updatedAt: DataTypes.DATE,
+    createdAt: DataTypes.DATE(),
+    updatedAt: DataTypes.DATE(),
   },
   {
-    tableName: 'menu',
+    tableName: 'orderHistory',
     sequelize: sequelizeConn.getInstance(),
     indexes: [{unique: true, fields: ['restaurantId', 'userId']}],
   }
 );
+
+OrderHistoryModel.sync();

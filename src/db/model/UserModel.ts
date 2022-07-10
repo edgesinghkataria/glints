@@ -5,7 +5,6 @@ import {
   InferCreationAttributes,
   DataTypes,
 } from 'sequelize';
-import OrderHistoryModel from './OrderHistoryModel';
 
 export default class UserModel extends Model<
   InferAttributes<UserModel>,
@@ -13,6 +12,7 @@ export default class UserModel extends Model<
 > {
   declare id: number;
   declare name: string;
+  declare cashBalance: number;
   declare updatedAt: Date;
   declare createdAt: Date;
 }
@@ -27,8 +27,11 @@ UserModel.init(
     name: {
       type: new DataTypes.STRING(128),
     },
-    createdAt: DataTypes.DATE,
-    updatedAt: DataTypes.DATE,
+    cashBalance: {
+      type: new DataTypes.INTEGER(),
+    },
+    createdAt: DataTypes.DATE(),
+    updatedAt: DataTypes.DATE(),
   },
   {
     tableName: 'user',
@@ -36,4 +39,4 @@ UserModel.init(
   }
 );
 
-UserModel.hasMany(OrderHistoryModel);
+UserModel.sync();

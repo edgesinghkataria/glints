@@ -28,13 +28,15 @@ DishModel.init(
       type: new DataTypes.STRING(128),
     },
     price: {
-      type: new DataTypes.NUMBER(),
+      type: new DataTypes.INTEGER(),
     },
-    createdAt: DataTypes.DATE,
-    updatedAt: DataTypes.DATE,
+    createdAt: DataTypes.DATE(),
+    updatedAt: DataTypes.DATE(),
   },
   {
     tableName: 'dish',
     sequelize: sequelizeConn.getInstance(),
   }
 );
+
+DishModel.sync();

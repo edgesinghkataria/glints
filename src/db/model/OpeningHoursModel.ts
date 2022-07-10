@@ -6,18 +6,19 @@ import {
   DataTypes,
 } from 'sequelize';
 
-export default class RestaurantModel extends Model<
-  InferAttributes<RestaurantModel>,
-  InferCreationAttributes<RestaurantModel>
+export default class OpeningHoursModel extends Model<
+  InferAttributes<OpeningHoursModel>,
+  InferCreationAttributes<OpeningHoursModel>
 > {
   declare id: number;
   declare restaurantId: number;
-  declare openingHours: Date;
+  declare openingTime: Date;
+  declare closingTime: Date;
   declare updatedAt: Date;
   declare createdAt: Date;
 }
 
-RestaurantModel.init(
+OpeningHoursModel.init(
   {
     id: {
       type: DataTypes.INTEGER.UNSIGNED,
@@ -25,17 +26,24 @@ RestaurantModel.init(
       primaryKey: true,
     },
     restaurantId: {
-      type: new DataTypes.NUMBER(),
+      type: new DataTypes.INTEGER(),
     },
-    openingHours: {
+    openingTime: {
       type: new DataTypes.DATE(),
     },
-    createdAt: DataTypes.DATE,
-    updatedAt: DataTypes.DATE,
+    closingTime: {
+      type: new DataTypes.DATE(),
+    },
+    createdAt: DataTypes.DATE(),
+    updatedAt: DataTypes.DATE(),
   },
   {
-    tableName: 'restaurant',
+    tableName: 'openingHours',
     sequelize: sequelizeConn.getInstance(),
-    indexes: [{unique: true, fields: ['restaurantId', 'openingHours']}],
+    indexes: [
+      {unique: true, fields: ['restaurantId', 'openingTime', 'closingTime']},
+    ],
   }
 );
+
+OpeningHoursModel.sync();

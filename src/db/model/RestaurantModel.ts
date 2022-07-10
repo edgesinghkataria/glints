@@ -5,7 +5,6 @@ import {
   InferCreationAttributes,
   DataTypes,
 } from 'sequelize';
-import OrderHistoryModel from './OrderHistoryModel';
 
 export default class RestaurantModel extends Model<
   InferAttributes<RestaurantModel>,
@@ -13,6 +12,7 @@ export default class RestaurantModel extends Model<
 > {
   declare id: number;
   declare name: string;
+  declare cashBalance: number;
   declare updatedAt: Date;
   declare createdAt: Date;
 }
@@ -27,11 +27,11 @@ RestaurantModel.init(
     name: {
       type: new DataTypes.STRING(128),
     },
-    openingHours: {
-      type: new DataTypes.NUMBER(),
+    cashBalance: {
+      type: new DataTypes.INTEGER(),
     },
-    createdAt: DataTypes.DATE,
-    updatedAt: DataTypes.DATE,
+    createdAt: DataTypes.DATE(),
+    updatedAt: DataTypes.DATE(),
   },
   {
     tableName: 'restaurant',
@@ -39,4 +39,4 @@ RestaurantModel.init(
   }
 );
 
-RestaurantModel.hasMany(OrderHistoryModel);
+RestaurantModel.sync();
