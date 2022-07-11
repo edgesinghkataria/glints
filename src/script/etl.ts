@@ -1,30 +1,31 @@
 import fs from 'fs';
+import path from 'path';
 import etl from 'etl';
-import Database from '../db/Database';
+import mysql from 'mysql2';
+
+// Create the connection pool. The pool-specific settings are the defaults
 
 class ETL {
-  init() {
-    fs.createReadStream('../../datadump/restaurant.json')
-      // parse the csv file
-      .pipe(etl.json())
-      // map `date` into a javascript date and set unique _id
-      .pipe(
-        etl.map((d: any) => ({
-          restaurantName: d.restaurantName,
-        }))
-      )
-      // collect 1000 records at a time for bulk-insert
-      .pipe(etl.collect(1000))
-      // upsert records to elastic with max 10 concurrent server requests
-      .pipe(
-        etl.mysql.upsert(Database, 'glints', 'restaurant', {concurrency: 4})
-      )
-      // Switch from stream to promise chain and report done or error
-      // .promise()
-      .then(
-        () => console.log('done'),
-        (e: any) => console.log('error', e)
-      );
+  async run(
+    pool: any,
+    sourceFile: string,
+    tableName: string,
+    transformFunc?: Function
+  ) {
+    if (!transformFunc) transformFunc = (data: any) => data;
+
+    return (
+      fs
+        .createReadStream(path.join(__dirname, sourceFile))
+        // parse the csv file
+        .pipe(etl.csv())
+        // map `date` into a javascript date and set unique _id
+        .pipe(etl.map(transformFunc))
+        .pipe(etl.mysql.script(pool, 'glints', tableName))
+        .pipe(etl.mysql.execute(pool, 4))
+        // Switch from stream to promise chain and report done or error
+        .promise()
+    );
   }
 }
 
