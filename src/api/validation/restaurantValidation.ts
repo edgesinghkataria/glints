@@ -1,5 +1,8 @@
 import {z} from 'zod';
-
+import {
+  GetDishesByPriceRangeInput,
+  searchRestaurantsByName,
+} from '../../db/service/RestaurantService';
 class restaurantValidation {
   getRestaurantsByOpeningTime(data: any) {
     const schema = z.object({
@@ -8,19 +11,29 @@ class restaurantValidation {
     });
     schema.parse(data);
   }
-  getDishesByPriceRange(data: any) {
+
+  getDishesByPriceRange(data: any): GetDishesByPriceRangeInput {
+    for (const key in data) {
+      if (Object.prototype.hasOwnProperty.call(data, key)) {
+        const value = data[key];
+        data[key] = Number(value);
+      }
+    }
+
     const schema = z.object({
-      dishCount: z.number(),
-      minPrice: z.date(),
-      maxTime: z.date(),
+      startPrice: z.number().positive(),
+      endPrice: z.number().positive(),
+      limit: z.number().positive(),
+      offset: z.number().nonnegative(),
     });
-    schema.parse(data);
+    return schema.parse(data);
   }
-  searchRestaurantsByName(data: any) {
+
+  searchRestaurantsByName(data: any): searchRestaurantsByName {
     const schema = z.object({
       searchText: z.string(),
     });
-    schema.parse(data);
+    return schema.parse(data);
   }
 }
 

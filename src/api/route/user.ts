@@ -1,8 +1,8 @@
 import {Router} from 'express';
 import UserController from '../controller/UserController';
 
-const categoriesRouter = Router();
+const userRouter = Router();
 
-categoriesRouter.post('/order', UserController.placeOrder);
+userRouter.post('/order', UserController.placeOrder);
 
-export default categoriesRouter;
+export default userRouter;

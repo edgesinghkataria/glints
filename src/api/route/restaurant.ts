@@ -1,12 +1,12 @@
 import {Router} from 'express';
 import RestaurantController from '../controller/RestaurantController';
 
-const categoriesRouter = Router();
+const restaurantRouter = Router();
 
-categoriesRouter.get('/', RestaurantController.getRestaurantsByOpeningTime);
+restaurantRouter.get('/', RestaurantController.getRestaurantsByOpeningTime);
 
-categoriesRouter.get('/dish', RestaurantController.getDishesByPriceRange);
+restaurantRouter.get('/dish', RestaurantController.getDishesByPriceRange);
 
-categoriesRouter.get('/search', RestaurantController.searchRestaurantsByName);
+restaurantRouter.get('/search', RestaurantController.searchRestaurantsByName);
 
-export default categoriesRouter;
+export default restaurantRouter;
