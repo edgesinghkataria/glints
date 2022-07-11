@@ -34,8 +34,14 @@ OpeningHoursModel.init(
     closingTime: {
       type: new DataTypes.DATE(),
     },
-    createdAt: DataTypes.DATE(),
-    updatedAt: DataTypes.DATE(),
+    createdAt: {
+      type: DataTypes.DATE(),
+      defaultValue: DataTypes.NOW,
+    },
+    updatedAt: {
+      type: DataTypes.DATE(),
+      defaultValue: DataTypes.NOW,
+    },
   },
   {
     tableName: 'openingHours',
@@ -46,4 +52,4 @@ OpeningHoursModel.init(
   }
 );
 
-OpeningHoursModel.sync();
+OpeningHoursModel.sync({alter: true});

@@ -10,14 +10,15 @@ export default class OrderHistoryModel extends Model<
   InferAttributes<OrderHistoryModel>,
   InferCreationAttributes<OrderHistoryModel>
 > {
-  declare id: number;
+  declare id?: number;
   declare userId: number;
   declare restaurantId: number;
+  declare restaurantName?: string;
+  declare dishName?: string;
   declare amount: number;
   declare dishId: number;
-  declare status: string;
-  declare updatedAt: Date;
-  declare createdAt: Date;
+  declare updatedAt?: Date;
+  declare createdAt?: Date;
 }
 
 OrderHistoryModel.init(
@@ -36,14 +37,23 @@ OrderHistoryModel.init(
     dishId: {
       type: new DataTypes.INTEGER(),
     },
+    restaurantName: {
+      type: new DataTypes.TEXT(),
+    },
+    dishName: {
+      type: new DataTypes.TEXT(),
+    },
     amount: {
       type: new DataTypes.INTEGER(),
     },
-    status: {
-      type: new DataTypes.ENUM('success', 'pending', 'failed'),
+    createdAt: {
+      type: DataTypes.DATE(),
+      defaultValue: DataTypes.NOW,
     },
-    createdAt: DataTypes.DATE(),
-    updatedAt: DataTypes.DATE(),
+    updatedAt: {
+      type: DataTypes.DATE(),
+      defaultValue: DataTypes.NOW,
+    },
   },
   {
     tableName: 'orderHistory',
@@ -52,4 +62,4 @@ OrderHistoryModel.init(
   }
 );
 
-OrderHistoryModel.sync();
+OrderHistoryModel.sync({alter: true});

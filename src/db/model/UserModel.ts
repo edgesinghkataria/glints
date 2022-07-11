@@ -25,13 +25,19 @@ UserModel.init(
       primaryKey: true,
     },
     name: {
-      type: new DataTypes.STRING(128),
+      type: new DataTypes.TEXT(),
     },
     cashBalance: {
       type: new DataTypes.INTEGER(),
     },
-    createdAt: DataTypes.DATE(),
-    updatedAt: DataTypes.DATE(),
+    createdAt: {
+      type: DataTypes.DATE(),
+      defaultValue: DataTypes.NOW,
+    },
+    updatedAt: {
+      type: DataTypes.DATE(),
+      defaultValue: DataTypes.NOW,
+    },
   },
   {
     tableName: 'user',
@@ -39,4 +45,4 @@ UserModel.init(
   }
 );
 
-UserModel.sync();
+UserModel.sync({alter: true});

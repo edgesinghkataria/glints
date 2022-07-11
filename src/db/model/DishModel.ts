@@ -12,9 +12,11 @@ export default class DishModel extends Model<
 > {
   declare id: number;
   declare dishName: string;
+  declare restaurantId: number;
   declare price: number;
   declare updatedAt: Date;
   declare createdAt: Date;
+  dataValues?: any;
 }
 
 DishModel.init(
@@ -25,13 +27,22 @@ DishModel.init(
       primaryKey: true,
     },
     dishName: {
-      type: new DataTypes.STRING(128),
+      type: DataTypes.TEXT(),
     },
     price: {
-      type: new DataTypes.INTEGER(),
+      type: DataTypes.DOUBLE,
     },
-    createdAt: DataTypes.DATE(),
-    updatedAt: DataTypes.DATE(),
+    restaurantId: {
+      type: DataTypes.INTEGER,
+    },
+    createdAt: {
+      type: DataTypes.DATE(),
+      defaultValue: DataTypes.NOW,
+    },
+    updatedAt: {
+      type: DataTypes.DATE(),
+      defaultValue: DataTypes.NOW,
+    },
   },
   {
     tableName: 'dish',
@@ -39,4 +50,4 @@ DishModel.init(
   }
 );
 
-DishModel.sync();
+DishModel.sync({alter: true});

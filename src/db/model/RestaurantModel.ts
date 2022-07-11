@@ -11,27 +11,34 @@ export default class RestaurantModel extends Model<
   InferCreationAttributes<RestaurantModel>
 > {
   declare id: number;
-  declare name: string;
+  declare restaurantName: string;
   declare cashBalance: number;
   declare updatedAt: Date;
   declare createdAt: Date;
+  declare dataValues?: any;
 }
 
 RestaurantModel.init(
   {
     id: {
       type: DataTypes.INTEGER.UNSIGNED,
-      autoIncrement: true,
+      // autoIncrement: true,
       primaryKey: true,
     },
-    name: {
-      type: new DataTypes.STRING(128),
+    restaurantName: {
+      type: new DataTypes.TEXT(),
     },
     cashBalance: {
-      type: new DataTypes.INTEGER(),
+      type: new DataTypes.DOUBLE(),
     },
-    createdAt: DataTypes.DATE(),
-    updatedAt: DataTypes.DATE(),
+    createdAt: {
+      type: DataTypes.DATE(),
+      defaultValue: DataTypes.NOW,
+    },
+    updatedAt: {
+      type: DataTypes.DATE(),
+      defaultValue: DataTypes.NOW,
+    },
   },
   {
     tableName: 'restaurant',
@@ -39,4 +46,4 @@ RestaurantModel.init(
   }
 );
 
-RestaurantModel.sync();
+RestaurantModel.sync({alter: true});
