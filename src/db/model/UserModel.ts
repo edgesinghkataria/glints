@@ -45,4 +45,4 @@ UserModel.init(
   }
 );
 
-UserModel.sync({alter: true});
+if (process.env.NODE_ENV === 'production') UserModel.sync();

@@ -50,4 +50,4 @@ DishModel.init(
   }
 );
 
-DishModel.sync({alter: true});
+if (process.env.NODE_ENV === 'production') DishModel.sync();

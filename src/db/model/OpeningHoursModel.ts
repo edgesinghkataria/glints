@@ -52,4 +52,4 @@ OpeningHoursModel.init(
   }
 );
 
-OpeningHoursModel.sync({alter: true});
+if (process.env.NODE_ENV === 'production') OpeningHoursModel.sync();

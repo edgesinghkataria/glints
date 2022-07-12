@@ -46,4 +46,4 @@ RestaurantModel.init(
   }
 );
 
-RestaurantModel.sync({alter: true});
+if (process.env.NODE_ENV === 'production') RestaurantModel.sync();

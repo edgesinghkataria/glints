@@ -62,4 +62,4 @@ OrderHistoryModel.init(
   }
 );
 
-OrderHistoryModel.sync({alter: true});
+if (process.env.NODE_ENV === 'production') OrderHistoryModel.sync();
