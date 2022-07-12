@@ -42,3 +42,16 @@ $ curl --location --request POST '${endpoint}/user/order'
     "dishId": "420"
 }'
 ```
+
+### Search restaurant that are open on perticular day&time
+
+```
+$ curl --location --request GET '${endpoint}/restaurant?openingTime=05:30&closingTime=18:00&day=mon'
+```
+
+
+### To run the ETL on json files
+
+```
+$ curl --location --request GET '${endpoint}/run/etl'
+```
