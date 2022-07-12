@@ -11,7 +11,7 @@ Run below command to install dependencies;
 npm i dotenv && npm i
 ```
 
-Create .env file in package.json directory and add below keys in its package
+Create .env file in package.json directory and add below keys in it
 
 ```
 DB_NAME="database_name"
