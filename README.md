@@ -8,7 +8,18 @@ More info is mentioned below about usage.
 Run below command to install dependencies;
 
 ```
-npm i
+npm i dotenv && npm i
+```
+
+Create .env file in package.json directory and add below keys in its package
+
+```
+DB_NAME="database_name"
+DB_USER="database_user"
+DB_HOST="database_host"
+DB_PASSWORD="database_password"
+PORT=3001
+DB_DRIVER="mysql"
 ```
 
 ## APIs
