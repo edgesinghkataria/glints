@@ -9,20 +9,13 @@ import RestaurantService from '../db/service/RestaurantService';
 
 let pool: any;
 
-function escapeStringRegexp(string: string) {
-  if (typeof string !== 'string') {
-    throw new TypeError('Expected a string');
-  }
-  return string.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&').replace(/'/g, "'");
-}
-
 async function connectDb() {
   if (pool != null) return pool;
   pool = await mysql.createPool({
-    host: 'localhost',
-    user: 'root',
-    password: 'root',
-    database: 'glints',
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0,
@@ -97,7 +90,7 @@ class ETLScript {
     // await User.run();
     // await Restaurant.run();
     // await Dish.run();
-    // await OpeningHours.run();
+    await OpeningHours.run();
     // await OrderHistory.run();
 
     // console.log('calling etl script now', Date.now());
