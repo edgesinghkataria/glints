@@ -79,6 +79,7 @@ export default class RestaurantService {
         {
           model: RestaurantModel,
           as: 'restaurantInfo',
+          attributes: ['restaurantName'],
         },
       ],
     });
