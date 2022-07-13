@@ -24,7 +24,7 @@ export default class OrderHistoryModel extends Model<
 OrderHistoryModel.init(
   {
     id: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
@@ -58,8 +58,5 @@ OrderHistoryModel.init(
   {
     tableName: 'orderHistory',
     sequelize: sequelizeConn.getInstance(),
-    indexes: [{unique: true, fields: ['restaurantId', 'userId']}],
   }
 );
-
-if (process.env.NODE_ENV === 'production') OrderHistoryModel.sync();

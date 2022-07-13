@@ -21,7 +21,7 @@ class ETL {
         .pipe(etl.csv())
         // map `date` into a javascript date and set unique _id
         .pipe(etl.map(transformFunc))
-        .pipe(etl.mysql.script(pool, 'glints', tableName))
+        .pipe(etl.mysql.script(pool, process.env.DB_NAME, tableName))
         .pipe(etl.mysql.execute(pool, 4))
         // Switch from stream to promise chain and report done or error
         .promise()

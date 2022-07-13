@@ -8,7 +8,6 @@ export default class Dish {
 
     let counter = 0;
     let dishCounter = 1;
-    let prevRestaurantName: string;
     const menuTransform = [
       transforms.unwind({paths: ['menu'], blankOut: true}),
       (item: any) => {

@@ -19,10 +19,14 @@ export interface GetDishesByPriceRangeInput {
   offset: number;
 }
 
+export interface getRestaurantScheduleInput {
+  openingTime: number;
+  closingTime: number;
+  limit: number;
+  offset: number;
+}
+
 export default class RestaurantService {
-  async getRestaurantsByOpeningTime(queryData: any) {
-    // RestaurantModel.create();
-  }
   async getDishesByPriceRange(queryData: GetDishesByPriceRangeInput) {
     return DishModel.findAll({
       where: {
@@ -42,7 +46,7 @@ export default class RestaurantService {
     });
   }
 
-  async getRestaurantsByName(name: string): Promise<RestaurantModel | null> {
+  async getRestaurantsByName(name: string) {
     return RestaurantModel.findOne({
       where: {
         restaurantName: name,
@@ -50,7 +54,7 @@ export default class RestaurantService {
     });
   }
 
-  getDishByNameAndRestaurantId(
+  async getDishByNameAndRestaurantId(
     name: string,
     restaurantId: number
   ): Promise<DishModel | null> {
@@ -59,6 +63,24 @@ export default class RestaurantService {
         dishName: name,
         restaurantId: restaurantId,
       },
+    });
+  }
+
+  async getRestaurantSchedule(queryData: getRestaurantScheduleInput) {
+    const where = {
+      openingTime: {[Op.gte]: queryData.openingTime},
+      closingTime: {[Op.lte]: queryData.closingTime},
+    };
+    return OpeningHoursModel.findAll({
+      where,
+      limit: queryData.limit,
+      offset: queryData.offset,
+      include: [
+        {
+          model: RestaurantModel,
+          as: 'restaurantInfo',
+        },
+      ],
     });
   }
 }

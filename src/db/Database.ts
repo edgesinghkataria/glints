@@ -34,12 +34,15 @@ class Database {
     if (!this._instance) this.intialize();
     return this._instance;
   }
-  static async sync() {
+  static async sync(options: object) {
     const instance = this._instance;
     try {
-      await instance.sync();
+      if (process.env.NODE_ENV === 'production') {
+        options = {};
+      }
+      await instance.sync(options);
     } catch (error) {
-      console.error(error, ' eeororisf');
+      console.error(error);
     }
   }
 }

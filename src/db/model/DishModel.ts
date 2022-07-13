@@ -22,7 +22,7 @@ export default class DishModel extends Model<
 DishModel.init(
   {
     id: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
@@ -49,5 +49,3 @@ DishModel.init(
     sequelize: sequelizeConn.getInstance(),
   }
 );
-
-if (process.env.NODE_ENV === 'production') DishModel.sync();

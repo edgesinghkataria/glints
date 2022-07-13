@@ -10,7 +10,7 @@
   },
   "include": [
     "src/**/*.ts",
-    // "datadump/**/*",
+    "dumpydumpy/*",
     "test/**/*.ts"
   ]
 }

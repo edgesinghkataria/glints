@@ -6,29 +6,12 @@ import responseHelper from '../responseHelper';
 import {
   GetDishesByPriceRangeInput,
   searchRestaurantsByName,
+  getRestaurantScheduleInput,
 } from '../../db/service/RestaurantService';
 
 export default class RestaurantController {
   private static userService: UserService = new UserService();
   private static restaurantService = new RestaurantService();
-
-  static async getRestaurantsByOpeningTime(
-    req: Request,
-    res: Response
-  ): Promise<void> {
-    try {
-      const data = restaurantValidation.getRestaurantsByOpeningTime(req.query);
-
-      const responseData =
-        await RestaurantController.restaurantService.getRestaurantsByOpeningTime(
-          data
-        );
-      responseHelper.sendOK(res, responseData);
-    } catch (error) {
-      console.error(error);
-      responseHelper.sendError(res, error);
-    }
-  }
 
   static async getDishesByPriceRange(
     req: Request,
@@ -57,6 +40,24 @@ export default class RestaurantController {
         restaurantValidation.searchRestaurantsByName(req.query);
       const responseData =
         await RestaurantController.restaurantService.searchRestaurantsByName(
+          data
+        );
+      responseHelper.sendOK(res, responseData);
+    } catch (error) {
+      console.error(error);
+      responseHelper.sendError(res, error);
+    }
+  }
+
+  static async getRestaurantSchedule(
+    req: Request,
+    res: Response
+  ): Promise<void> {
+    try {
+      const data: getRestaurantScheduleInput =
+        restaurantValidation.getRestaurantSchedule(req.query);
+      const responseData =
+        await RestaurantController.restaurantService.getRestaurantSchedule(
           data
         );
       responseHelper.sendOK(res, responseData);

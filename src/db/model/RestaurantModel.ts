@@ -21,7 +21,7 @@ export default class RestaurantModel extends Model<
 RestaurantModel.init(
   {
     id: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       // autoIncrement: true,
       primaryKey: true,
     },
@@ -45,5 +45,3 @@ RestaurantModel.init(
     sequelize: sequelizeConn.getInstance(),
   }
 );
-
-if (process.env.NODE_ENV === 'production') RestaurantModel.sync();

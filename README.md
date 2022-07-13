@@ -32,17 +32,23 @@ endpoint= https://git.heroku.com/glints-restaurant-app.git/api/v1
 
 ### Below API gets all the dishes within the price range with limit and offset
 
+All query params are required.
+
 ```
 $ curl --location --request GET '${endpoint}/restaurant/dish?startPrice=1&endPrice=14&limit=10&offset=0'
 ```
 
 ### Below API search for restaurant using input
 
+All query params are required.
+
 ```
 $ curl --location --request GET '${endpoint}/restaurant/search?searchText=indian'
 ```
 
 ### Below API make a user purchase for a dish from a restaurant
+
+All query params are required.
 
 ```
 $ curl --location --request POST '${endpoint}/user/order' 
@@ -56,8 +62,10 @@ $ curl --location --request POST '${endpoint}/user/order'
 
 ### Search restaurant that are open on perticular day&time
 
+All query params are required.
+
 ```
-$ curl --location --request GET '${endpoint}/restaurant?openingTime=05:30&closingTime=18:00&day=mon'
+$ curl --location --request GET 'localhost:3001/api/v1/restaurant/schedule?openingTime=0&closingTime=1200&limit=10&offset=0'
 ```
 
 

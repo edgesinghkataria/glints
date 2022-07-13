@@ -20,7 +20,7 @@ export default class UserModel extends Model<
 UserModel.init(
   {
     id: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
@@ -44,5 +44,3 @@ UserModel.init(
     sequelize: sequelizeConn.getInstance(),
   }
 );
-
-if (process.env.NODE_ENV === 'production') UserModel.sync();

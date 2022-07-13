@@ -1,11 +1,11 @@
 import mysql from 'mysql2';
-import Dish from './json2CSV/Dish';
 import OpeningHours from './json2CSV/OpeningHours';
-import OrderHistory from './json2CSV/OrderHistory';
-import Restaurant from './json2CSV/Restaurant';
 import User from './json2CSV/User';
+import Restaurant from './json2CSV/Restaurant';
+import Dish from './json2CSV/Dish';
+import OrderHistory from './json2CSV/OrderHistory';
+import {getRestaurantScheduleInput} from '../db/service/RestaurantService';
 import etl from './etl';
-import RestaurantService from '../db/service/RestaurantService';
 
 let pool: any;
 
@@ -21,6 +21,10 @@ async function connectDb() {
     queueLimit: 0,
   });
   return pool;
+}
+
+interface getRestaurantSchedule extends getRestaurantScheduleInput {
+  day: string;
 }
 
 class ETLScript {
@@ -62,6 +66,7 @@ class ETLScript {
             item.dishData = dishData[0][0];
           } catch (error) {
             console.log(error, item);
+            clearInterval(intervalId);
           }
         })
       );
@@ -77,33 +82,91 @@ class ETLScript {
             );
         } catch (error) {
           console.error('error while ETL', error);
+          clearInterval(intervalId);
         }
       });
       offset += limit;
     }
+    // processing 100 entries per second
     const intervalId = setInterval(_mapper, 1000);
+  }
+
+  private async deserializeOpeningData() {
+    const limit = 100;
+    let offset = 0;
+    let entries = [];
+    const totalEntries = await pool
+      .promise()
+      .query(`SELECT count(id) as count FROM openingHours`);
+    console.log(totalEntries);
+
+    async function _mapper(): Promise<boolean> {
+      const rangeData = await pool
+        .promise()
+        .query(`SELECT * FROM openingHours limit ${limit} offset ${offset}`);
+
+      entries = rangeData[0].filter((data: any) => data.dayStringify);
+
+      const promiseList: any[] = [];
+
+      entries.forEach(insertTime);
+      function insertTime(item: any) {
+        if (item.dayStringify.length < 10) return;
+        const scheduleList = JSON.parse(item.dayStringify);
+
+        scheduleList.forEach((schedule: getRestaurantSchedule) => {
+          // pushing new data
+          promiseList.push(
+            pool
+              .promise()
+              .query(
+                `INSERT INTO openingHours (id, restaurantId, day, dayStringify, openingTime, closingTime) VALUES (NULL, ${item.restaurantId}, "${schedule.day}", "", ${schedule.openingTime}, ${schedule.closingTime})`
+              )
+          );
+        });
+      }
+
+      await Promise.all(promiseList);
+
+      if (entries.length === 0) {
+        return true;
+      } else {
+        offset += limit;
+        return _mapper();
+      }
+    }
+
+    await pool.promise().query(
+      `ALTER TABLE openingHours
+        DROP COLUMN dayStringify;`
+    );
+
+    _mapper();
   }
 
   async run() {
     await connectDb();
     console.log('calling parser', Date.now());
-    // await User.run();
-    // await Restaurant.run();
-    // await Dish.run();
+    await User.run();
+    await Restaurant.run();
+    await Dish.run();
     await OpeningHours.run();
-    // await OrderHistory.run();
+    await OrderHistory.run();
 
     // console.log('calling etl script now', Date.now());
 
-    // await etl.run(pool, '../../datadump/restaurant.csv', 'restaurant');
-    // await etl.run(pool, '../../datadump/user.csv', 'user');
-    // await etl.run(pool, '../../datadump/dish.csv', 'dish');
-    // await etl.run(pool, '../../datadump/orderHistory.csv', 'orderHistory');
-    // await etl.run(pool, '../../datadump/openingHours.csv', 'openingHours');
+    await etl.run(pool, '../../datadump/restaurant.csv', 'restaurant');
+    await etl.run(pool, '../../datadump/user.csv', 'user');
+    await etl.run(pool, '../../datadump/dish.csv', 'dish');
+    await etl.run(pool, '../../datadump/orderHistory.csv', 'orderHistory');
+    await etl.run(pool, '../../datadump/openingHours.csv', 'openingHours');
 
     console.log('Linking orders to restaurant and dish');
     this.mappingOrderToRestaurant();
     console.log('Linked orders to restaurant and dish successfuly');
+    console.log('serializing opening time');
+    this.deserializeOpeningData();
+    console.log('serialized opening time successfuly');
   }
 }
 

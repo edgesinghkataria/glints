@@ -9,7 +9,7 @@ export default (async () => {
 
     connectionInst.authenticate();
     console.log('Connected to db successfully.');
-
+    await Database.sync({alter: true});
     await Express.initialize();
   } catch (error) {
     console.error('Unable to connect to the database:', error);
