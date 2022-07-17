@@ -62,7 +62,7 @@ $ curl --location --request POST '${endpoint}/user/order'
 
 ### Search restaurant that are open on perticular day&time
 
-All query params are required.
+All query params are required. time in the format of number of minutes it's been since the mid night;
 
 ```
 $ curl --location --request GET 'localhost:3001/api/v1/restaurant/schedule?openingTime=0&closingTime=1200&limit=10&offset=0'
